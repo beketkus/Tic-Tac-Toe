@@ -66,7 +66,16 @@ bool win_pos(int a[3][3], int c){
 }
 	
 
-
+bool sig_check(int a[3][3], int c, int pos){
+	int k = 0;
+	for(int i = 0; i < 3; i++){
+		for(int j = 0; j < 3; j++){
+			if(a[i][j] != 0 and k + 1 == pos) return true;
+			k++;
+		}
+	}
+	return false;
+}
 
 
 
@@ -99,40 +108,65 @@ int main() {
 	
 	//игра
 	while(true){
+		
+				//ХОД ПЕРВОГО ИГРОКА
+				
 				cout << "Your turn, " << player1 << endl;
 				TableDisplay(a);
 				cin >> position;
-				PositionPut(1, position, a); //вставка позиций
 				
-				//проверка выигрышной позиции
-				if(win_pos(a,1) == true){
+				//1)проверка на дурака
+				while(sig_check(a,1, position)){
+					printf("Position isn't valid, try again\n");
+					cin >> position;
+				}
+				
+				//2)вставка позиций
+				PositionPut(1, position, a); 
+				
+
+				//3)проверка выигрышной позиции
+				if(cnt <= 6){
+					if(win_pos(a,1) == true){
 					TableDisplay(a);
 					cout << player1 << " wins" << endl;
 					break;
 				}
-				
-				cnt--; //счетчик действий
+				}
+				//4)счетчик действий
+				cnt--; 
 				if(cnt == 0){
 					TableDisplay(a);
 					printf("Draw");
 					break;
 				}
 				
+				//ХОД ВТОРОГО ИГРОКА
+				
 				cout << "Your turn, " << player2 << endl;
 				TableDisplay(a);
 				cin >> position;
-				//вставка позиций
+				
+				//1)проверка на дурака
+				while(sig_check(a,2, position)){
+					printf("Position isn't valid, try again\n");
+					cin >> position;
+				}
+				
+				//2)вставка позиций
 				PositionPut(2, position, a);
 				
-				 //проверка выигрышной позиции
+				 //3)проверка выигрышной позиции
+				if(cnt <= 6){
 				if(win_pos(a,2) == true){
 					TableDisplay(a);
 					cout << player2 << " wins" << endl;
 					break;
+					}
 				}
 				
-				
-				cnt--; //счетчик действий
+				//4)счетчик действий
+				cnt--; 
 				if(cnt == 0){
 					TableDisplay(a);
 					printf("Draw");
